@@ -18,19 +18,24 @@ class FLNN:
     Parameters
     ----------
     size_input : int, default=5
-        The number of input nodes
-
-    size_hidden : int, default=10
-        The number of hidden nodes
+        The number of input features
 
     size_output : int, default=1
-        The number of output nodes
+        The number of output labels
 
-    act_name : {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
-        "swish", "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink" }, default='sigmoid'
-        Activation function for the hidden layer.
+    expand_name : str, default="chebyshev"
+        The expand function that will be used. The supported expand functions are:
+        {"chebyshev", "legendre", "gegenbauer", "laguerre", "hermite", "power", "trigonometric"}
+        
+    n_funcs : int, default=4
+        The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
+    
+    act_name : str, default='sigmoid'
+        Activation function for the hidden layer. The supported activation functions are: 
+        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid", 
+        "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
     """
-    def __init__(self, size_input=5, size_output=1, expand_name="chebyshev", n_funcs=4, act_name='elu', ):
+    def __init__(self, size_input=5, size_output=1, expand_name="chebyshev", n_funcs=4, act_name='elu'):
         self.input_nodes = size_input * n_funcs
         self.output_nodes = size_output
         self.size_w = self.input_nodes
@@ -44,7 +49,7 @@ class FLNN:
             "w": np.random.rand(self.input_nodes, self.output_nodes),
             "b": np.random.rand(self.output_nodes, ),
         }
-
+    
     def transform_X(self, X):
         return self.expand_func(X, self.n_funcs)
 
@@ -106,12 +111,17 @@ class BaseFlnn(BaseEstimator):
 
     Parameters
     ----------
-    hidden_size : int, default=10
-        The number of hidden nodes
+    expand_name : str, default="chebyshev"
+        The expand function that will be used. The supported expand functions are:
+        {"chebyshev", "legendre", "gegenbauer", "laguerre", "hermite", "power", "trigonometric"}
+        
+    n_funcs : int, default=4
+        The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
-        "swish", "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink" }, default='sigmoid'
-        Activation function for the hidden layer.
+    act_name : str, default='sigmoid'
+        Activation function for the hidden layer. The supported activation functions are:
+        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
+        "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
     """
 
     SUPPORTED_CLS_METRICS = get_all_classification_metrics()
@@ -328,16 +338,21 @@ class BaseFlnn(BaseEstimator):
 
 class BaseMhaFlnn(BaseFlnn):
     """
-    Defines the most general class for Metaheuristic-based FLNN model that inherits the BaseELM class
+    Defines the most general class for Metaheuristic-based FLNN model that inherits the BaseFlnn class
 
     Parameters
     ----------
-    hidden_size : int, default=10
-        The number of hidden nodes
+    expand_name : str, default="chebyshev"
+        The expand function that will be used. The supported expand functions are:
+        {"chebyshev", "legendre", "gegenbauer", "laguerre", "hermite", "power", "trigonometric"}
 
-    act_name : {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
-        "swish", "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink" }, default='sigmoid'
-        Activation function for the hidden layer.
+    n_funcs : int, default=4
+        The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
+
+    act_name : str, default='sigmoid'
+        Activation function for the hidden layer. The supported activation functions are:
+        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
+        "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
 
     obj_name : None or str, default=None
         The name of objective for the problem, also depend on the problem is classification and regression.
@@ -397,10 +412,7 @@ class BaseMhaFlnn(BaseFlnn):
         self.network, self.obj_scaler = self.create_network(X, y)
         y_scaled = self.obj_scaler.transform(y)
         self.X_temp, self.y_temp = X, y_scaled
-        self.size_w1 = X.shape[1] * self.hidden_size
-        self.size_b = self.hidden_size
-        self.size_w2 = self.hidden_size * 1
-        problem_size = self.size_w1 + self.size_b
+        problem_size = self.network.get_weights_size()
         lb = [-1, ] * problem_size
         ub = [1, ] * problem_size
         log_to = "console" if self.verbose else "None"
