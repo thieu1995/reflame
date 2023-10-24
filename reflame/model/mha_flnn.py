@@ -9,7 +9,7 @@ from permetrics import RegressionMetric, ClassificationMetric
 from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.preprocessing import OneHotEncoder
 from reflame.base_flnn import BaseMhaFlnn, FLNN
-from reflame.utils.encoder import ObjectiveScaler
+from reflame.utils.data_toolkit import ObjectiveScaler
 
 
 class MhaFlnnRegressor(BaseMhaFlnn, RegressorMixin):
