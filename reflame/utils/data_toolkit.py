@@ -354,9 +354,18 @@ class Data:
 
     def __init__(self, X=None, y=None, name="Unknown"):
         self.X = X
-        self.y = y
+        self.y = self.check_y(y)
         self.name = name
         self.X_train, self.y_train, self.X_test, self.y_test = None, None, None, None
+
+    @staticmethod
+    def check_y(y):
+        if y is None:
+            return y
+        y = np.squeeze(np.asarray(y))
+        if y.ndim == 1:
+            y = np.reshape(y, (-1, 1))
+        return y
 
     @staticmethod
     def scale(X, scaling_methods=('standard', ), list_dict_paras=None):
