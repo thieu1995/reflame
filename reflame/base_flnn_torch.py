@@ -23,7 +23,7 @@ class FLNN(nn.Module):
     SUPPORTED_ACTIVATIONS = ['threshold', 'relu', 'rrelu', 'hardtanh', 'relu6', 'sigmoid', 'hardsigmoid', 'tanh',
            'silu', 'mish', 'hardswish', 'elu', 'celu', 'selu', 'glu', 'gelu', 'hardshrink', 'leakyrelu',
            'logsigmoid', 'softplus', 'softshrink', 'multiheadattention', 'prelu', 'softsign', 'tanhshrink',
-           'softmin', 'softmax', 'softmax2d', 'logsoftmax']
+           'softmin', 'softmax', 'logsoftmax']
 
     def __init__(self, size_input=10, size_output=1, expand_name="chebyshev", n_funcs=4, act_name='elu'):
         super(FLNN, self).__init__()
@@ -34,7 +34,10 @@ class FLNN(nn.Module):
         self.n_funcs = n_funcs
         # Define the activation function
         self.act_name = act_name
-        self.act_func = getattr(nn.functional, self.act_name)
+        if act_name == "softmax":
+            self.act_func = nn.Softmax(dim=0)
+        else:
+            self.act_func = getattr(nn.functional, self.act_name)
         # Create the output layer
         self.output_layer = nn.Linear(self.input_nodes, self.output_nodes, bias=True)
 
@@ -131,10 +134,10 @@ class BaseFlnn(BaseEstimator):
         self.network, self.obj_scaler = self.create_network(X, y)
         y_scaled = self.obj_scaler.transform(y)
         X = torch.tensor(X, dtype=torch.float32)
-        if len(y_scaled) == 1:
+        if y_scaled.ndim == 1:
             y_scaled = y_scaled.reshape(-1, 1)
         y_scaled = torch.tensor(y_scaled, dtype=torch.float32)
-        self.network.fit(X, y_scaled)
+        self.network.fit(X, y=y_scaled)
         return self
 
     def predict(self, X, return_prob=False):
@@ -152,10 +155,10 @@ class BaseFlnn(BaseEstimator):
             - If True, the returned results are the probability for each sample
             - If False, the returned results are the predicted labels
         """
-        pred = self.network.predict(X)
         if return_prob:
-            return pred
-        return self.obj_scaler.inverse_transform(pred)
+            return self.network.predict_proba(X)
+        else:
+            return self.network.predict(X)
 
     def __evaluate_reg(self, y_true, y_pred, list_metrics=("MSE", "MAE")):
         rm = RegressionMetric(y_true=y_true, y_pred=y_pred, decimal=8)
