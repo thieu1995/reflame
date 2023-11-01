@@ -8,4 +8,4 @@ __version__ = "1.0.0"
 
 from reflame.utils.data_toolkit import Data, DataTransformer
 from reflame.model.mha_flnn import MhaFlnnRegressor, MhaFlnnClassifier
-from reflame.model.standard_flnn import FlnnRegressor
+from reflame.model.standard_flnn import FlnnRegressor, FlnnClassifier
