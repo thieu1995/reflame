@@ -1,11 +1,7 @@
 
 <p align="center">
 
-<img style="max-width:100%;" 
-
-src="https://thieu1995.github.io/post/2023-08/reflame.png" 
-
-alt="Reflame"/>
+<img style="max-width:100%;" src="https://thieu1995.github.io/post/2023-08/reflame.png" alt="Reflame"/>
 
 </p>
 
