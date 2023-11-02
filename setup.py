@@ -75,5 +75,5 @@ setup(
     extras_require={
         "dev": ["pytest>=7.0", "pytest-cov==4.0.0", "flake8>=4.0.1"],
     },
-    python_requires='>=3.7',
+    python_requires='>=3.8',
 )
