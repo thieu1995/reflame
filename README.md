@@ -6,7 +6,7 @@
 </p>
 
 
-### Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - An Python Library
+### Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - A Python Library
 
 ---
 
@@ -39,7 +39,7 @@ With Reflame, you can perform searches and hyperparameter tuning using the funct
 * **Supported performance metrics**: >= 67 (47 regressions and 20 classifications)
 * **Supported objective functions (as fitness functions or loss functions)**: >= 67 (47 regressions and 20 classifications)
 * **Documentation:** https://intelelm.readthedocs.io/en/latest/
-* **Python versions:** >= 3.7.x
+* **Python versions:** >= 3.8.x
 * **Dependencies:** numpy, scipy, scikit-learn, pandas, mealpy, permetrics, torch, skorch
 
 
@@ -55,7 +55,7 @@ Please include these citations if you plan to use this library:
 ```code
 @software{nguyen_van_thieu_2023_8249046,
   author       = {Nguyen Van Thieu},
-  title        = {Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - An Python Library},
+  title        = {Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - A Python Library},
   month        = 11,
   year         = 2023,
   publisher    = {Zenodo},

@@ -18,7 +18,7 @@ setup(
     version="1.0.0",
     author="Thieu",
     author_email="nguyenthieu2102@gmail.com",
-    description="Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - An Python Library",
+    description="Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - A Python Library",
     long_description=readme(),
     long_description_content_type="text/markdown",
     keywords=["functional link neural network", "machine learning", "artificial intelligence",

@@ -13,7 +13,7 @@ Please include these citations if you plan to use this library::
 
 	@software{nguyen_van_thieu_2023_8249046,
 	  author       = {Nguyen Van Thieu},
-	  title        = {Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - An Python Library},
+	  title        = {Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - A Python Library},
 	  month        = 11,
 	  year         = 2023,
 	  publisher    = {Zenodo},
