@@ -4,21 +4,13 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
-import numpy as np
 from reflame import Data, FlnnRegressor
-
-
-def get_dataset():
-    from sklearn import datasets
-
-    diabetes = datasets.load_diabetes()
-    X, y = diabetes.data, diabetes.target
-    dt_obj = Data(X, y)
-    return dt_obj
+from sklearn.datasets import load_diabetes
 
 
 ## Load data object
-data = get_dataset()
+X, y = load_diabetes(return_X_y=True)
+data = Data(X, y)
 
 ## Split train and test
 data.split_train_test(test_size=0.2, random_state=2, inplace=True)
