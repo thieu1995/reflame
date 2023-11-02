@@ -3,14 +3,14 @@
 #       Email: nguyenthieu2102@gmail.com            %                                                    
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
+
 import pickle
 from pathlib import Path
-
 import numpy as np
 import pandas as pd
 from permetrics import RegressionMetric, ClassificationMetric
 from sklearn.base import BaseEstimator
-from mealpy import get_optimizer_by_name, Optimizer, get_all_optimizers
+from mealpy import get_optimizer_by_name, Optimizer, get_all_optimizers, FloatVar
 from reflame.utils import activation, validator, expand_util
 from reflame.utils.evaluator import get_all_regression_metrics, get_all_classification_metrics
 
@@ -502,11 +502,11 @@ class BaseMhaFlnn(BaseFlnn):
     def _get_history_loss(self, optimizer=None):
         list_global_best = optimizer.history.list_global_best
         # 2D array / matrix 2D
-        global_obj_list = np.array([agent[1][-1] for agent in list_global_best])
-        # Make each obj_list as a element in array for drawing
-        return global_obj_list[:, 0]
+        global_obj_list = np.array([agent.target.fitness for agent in list_global_best])
+        # Make each obj_list as an element in array for drawing
+        return global_obj_list
 
-    def fitness_function(self, solution=None):
+    def objective_function(self, solution=None):
         pass
 
     def fit(self, X, y, lb=(-10.0, ), ub=(10.0, ), save_population=False):
@@ -539,15 +539,14 @@ class BaseMhaFlnn(BaseFlnn):
             else:
                 raise ValueError("obj_name is not supported. Please check the library: permetrics to see the supported objective function.")
         problem = {
-            "fit_func": self.fitness_function,
-            "lb": lb,
-            "ub": ub,
+            "obj_func": self.objective_function,
+            "bounds": FloatVar(lb=lb, ub=ub),
             "minmax": minmax,
             "log_to": log_to,
             "save_population": save_population,
             "obj_weights": self.obj_weights
         }
-        self.solution, self.best_fit = self.optimizer.solve(problem)
-        self.network.update_weights_from_solution(self.solution)
+        self.optimizer.solve(problem)
+        self.network.update_weights_from_solution(self.optimizer.g_best.solution)
         self.loss_train = self._get_history_loss(optimizer=self.optimizer)
         return self

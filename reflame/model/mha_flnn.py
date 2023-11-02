@@ -100,7 +100,7 @@ class MhaFlnnRegressor(BaseMhaFlnn, RegressorMixin):
         network = FLNN(size_input=X.shape[1], size_output=size_output, expand_name=self.expand_name, n_funcs=self.n_funcs, act_name=self.act_name)
         return network, obj_scaler
 
-    def fitness_function(self, solution=None):
+    def objective_function(self, solution=None):
         """
         Evaluates the fitness function for regression metric
 
@@ -267,7 +267,7 @@ class MhaFlnnClassifier(BaseMhaFlnn, ClassifierMixin):
         network = FLNN(size_input=X.shape[1], size_output=self.n_labels, expand_name=self.expand_name, n_funcs=self.n_funcs, act_name=self.act_name)
         return network, obj_scaler
 
-    def fitness_function(self, solution=None):
+    def objective_function(self, solution=None):
         """
         Evaluates the fitness function for classification metric
 
