@@ -71,7 +71,7 @@ setup(
     ],
     install_requires=["numpy>=1.17.1", "scipy>=1.7.1", "scikit-learn>=1.0.2",
                       "pandas>=1.3.5", "mealpy>=2.5.4", "permetrics>=1.4.3",
-                      "torch==2.0.1", "skorch==0.15.0"],
+                      "torch>=2.0.0", "skorch>=0.13.0"],
     extras_require={
         "dev": ["pytest>=7.0", "pytest-cov==4.0.0", "flake8>=4.0.1"],
     },
