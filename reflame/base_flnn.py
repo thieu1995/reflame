@@ -3,8 +3,11 @@
 #       Email: nguyenthieu2102@gmail.com            %                                                    
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
+import pickle
+from pathlib import Path
 
 import numpy as np
+import pandas as pd
 from permetrics import RegressionMetric, ClassificationMetric
 from sklearn.base import BaseEstimator
 from mealpy import get_optimizer_by_name, Optimizer, get_all_optimizers
@@ -38,7 +41,7 @@ class FLNN:
     def __init__(self, size_input=5, size_output=1, expand_name="chebyshev", n_funcs=4, act_name='elu'):
         self.input_nodes = size_input * n_funcs
         self.output_nodes = size_output
-        self.size_w = self.input_nodes
+        self.size_w = self.input_nodes * self.output_nodes
         self.size_b = size_output
         self.expand_name = expand_name
         self.expand_func = getattr(expand_util, f"expand_{self.expand_name}")
@@ -172,6 +175,14 @@ class BaseFlnn(BaseEstimator):
         if return_prob:
             return pred
         return self.obj_scaler.inverse_transform(pred)
+
+    def __evaluate_reg(self, y_true, y_pred, list_metrics=("MSE", "MAE")):
+        rm = RegressionMetric(y_true=y_true, y_pred=y_pred, decimal=8)
+        return rm.get_metrics_by_list_names(list_metrics)
+
+    def __evaluate_cls(self, y_true, y_pred, list_metrics=("AS", "RS")):
+        cm = ClassificationMetric(y_true, y_pred, decimal=8)
+        return cm.get_metrics_by_list_names(list_metrics)
     
     def __score_reg(self, X, y, method="RMSE"):
         """Return the metric of the prediction.
@@ -291,6 +302,27 @@ class BaseFlnn(BaseEstimator):
         t2 = cm.get_metrics_by_list_names(list_scores)
         return {**t2, **t1}
 
+    def evaluate(self, y_true, y_pred, list_metrics=None):
+        """Return the list of performance metrics of the prediction.
+
+        Parameters
+        ----------
+        y_true : array-like of shape (n_samples,) or (n_samples, n_outputs)
+            True values for `X`.
+
+        y_pred : array-like of shape (n_samples,) or (n_samples, n_outputs)
+            Predicted values for `X`.
+
+        list_metrics : list
+            You can get metrics from Permetrics library: https://github.com/thieu1995/permetrics
+
+        Returns
+        -------
+        results : dict
+            The results of the list metrics
+        """
+        pass
+
     def score(self, X, y, method=None):
         """Return the metric of the prediction.
 
@@ -334,6 +366,75 @@ class BaseFlnn(BaseEstimator):
             The results of the list metrics
         """
         pass
+
+    def save_loss_train(self, save_path="history", filename="loss.csv"):
+        """
+        Save the loss (convergence) during the training process to csv file.
+
+        Parameters
+        ----------
+        save_path : saved path (relative path, consider from current executed script path)
+        filename : name of the file, needs to have ".csv" extension
+        """
+        Path(save_path).mkdir(parents=True, exist_ok=True)
+        if self.loss_train is None:
+            print(f"{self.__class__.__name__} model doesn't have training loss!")
+        else:
+            data = {"epoch": list(range(1, len(self.loss_train) + 1)), "loss": self.loss_train}
+            pd.DataFrame(data).to_csv(f"{save_path}/{filename}", index=False)
+
+    def save_metrics(self, y_true, y_pred, list_metrics=("RMSE", "MAE"), save_path="history", filename="metrics.csv"):
+        """
+        Save evaluation metrics to csv file
+
+        Parameters
+        ----------
+        y_true : ground truth data
+        y_pred : predicted output
+        list_metrics : list of evaluation metrics
+        save_path : saved path (relative path, consider from current executed script path)
+        filename : name of the file, needs to have ".csv" extension
+        """
+        Path(save_path).mkdir(parents=True, exist_ok=True)
+        results = self.evaluate(y_true, y_pred, list_metrics)
+        df = pd.DataFrame.from_dict(results, orient='index').T
+        df.to_csv(f"{save_path}/{filename}", index=False)
+
+    def save_y_predicted(self, X, y_true, save_path="history", filename="y_predicted.csv"):
+        """
+        Save the predicted results to csv file
+
+        Parameters
+        ----------
+        X : The features data, nd.ndarray
+        y_true : The ground truth data
+        save_path : saved path (relative path, consider from current executed script path)
+        filename : name of the file, needs to have ".csv" extension
+        """
+        Path(save_path).mkdir(parents=True, exist_ok=True)
+        y_pred = self.predict(X, return_prob=False)
+        data = {"y_true": np.squeeze(np.asarray(y_true)), "y_pred": np.squeeze(np.asarray(y_pred))}
+        pd.DataFrame(data).to_csv(f"{save_path}/{filename}", index=False)
+
+    def save_model(self, save_path="history", filename="model.pkl"):
+        """
+        Save model to pickle file
+
+        Parameters
+        ----------
+        save_path : saved path (relative path, consider from current executed script path)
+        filename : name of the file, needs to have ".pkl" extension
+        """
+        Path(save_path).mkdir(parents=True, exist_ok=True)
+        if filename[-4:] != ".pkl":
+            filename += ".pkl"
+        pickle.dump(self, open(f"{save_path}/{filename}", 'wb'))
+
+    @staticmethod
+    def load_model(load_path="history", filename="model.pkl"):
+        if filename[-4:] != ".pkl":
+            filename += ".pkl"
+        return pickle.load(open(f"{load_path}/{filename}", 'rb'))
 
 
 class BaseMhaFlnn(BaseFlnn):
