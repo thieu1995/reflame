@@ -1,12 +1,8 @@
 
 <p align="center">
-
 <img style="max-width:100%;" src="https://thieu1995.github.io/post/2023-08/reflame.png" alt="Reflame"/>
-
 </p>
 
-
-### Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - A Python Library
 
 ---
 
@@ -46,8 +42,8 @@ With Reflame, you can perform searches and hyperparameter tuning using the funct
 # Citation Request 
 
 If you want to understand how Metaheuristic is applied to Functional Link Neural Network, you need to read the paper 
-titled "A resource usage prediction system using functional-link and genetic algorithm neural network for multivariate cloud metrics". The paper can be accessed at the 
-following [this link](https://doi.org/10.1109/SOCA.2018.00014)
+titled "A resource usage prediction system using functional-link and genetic algorithm neural network for multivariate cloud metrics". 
+The paper can be accessed at the following [this link](https://doi.org/10.1109/SOCA.2018.00014)
 
 
 Please include these citations if you plan to use this library:
