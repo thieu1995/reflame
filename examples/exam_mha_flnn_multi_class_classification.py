@@ -4,7 +4,7 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
-from reflame import Data, FlnnClassifier
+from reflame import Data, MhaFlnnClassifier
 from sklearn.datasets import load_iris
 
 
@@ -24,11 +24,11 @@ data.y_train, scaler_y = data.encode_label(data.y_train)
 data.y_test = scaler_y.transform(data.y_test)
 
 ## Create model
-model = FlnnClassifier(expand_name="chebyshev", n_funcs=4, act_name="elu",
-                      obj_name="CEL", max_epochs=100, batch_size=32, optimizer="SGD", verbose=True)
+model = MhaFlnnClassifier(expand_name="chebyshev", n_funcs=4, act_name="softmax", obj_name="CEL",
+                          optimizer="BaseGA", optimizer_paras={"epoch": 100, "pop_size": 20}, verbose=True)
 
 ## Train the model
-model.fit(X=data.X_train, y=data.y_train)
+model.fit(X=data.X_train, y=data.y_train, lb=-1., ub=1.0)
 
 ## Test the model
 y_pred = model.predict(data.X_test, return_prob=True)

@@ -26,7 +26,7 @@ data.y_test = scaler_y.transform(data.y_test)
 ## Create model
 opt_paras = {"name": "GA", "epoch": 10, "pop_size": 30}
 print(MhaFlnnClassifier.SUPPORTED_CLS_OBJECTIVES)
-model = MhaFlnnClassifier(expand_name="chebyshev", n_funcs=4, act_name="sigmoid",
+model = MhaFlnnClassifier(expand_name="chebyshev", n_funcs=4, act_name="softmax",
                           obj_name="NPV", optimizer="BaseGA", optimizer_paras=opt_paras, verbose=True)
 
 ## Train the model
