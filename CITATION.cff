@@ -5,7 +5,7 @@ authors:
     given-names: "Nguyen"
     orcid: "https://orcid.org/0000-0001-9994-8747"
 title: "Revolutionizing Functional Link Neural Network by Metaheuristic Algorithms: reflame - A Python Library"
-version: 1.0.0
-doi: 10.5281/zenodo.8249046
-date-released: 2023-11-05
+version: 1.0.1
+doi: 10.5281/zenodo.10067995
+date-released: 2023-11-26
 url: "https://github.com/thieu1995/reflame"
