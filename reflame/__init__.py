@@ -4,7 +4,7 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 from reflame.utils.data_toolkit import Data, DataTransformer
 from reflame.model.mha_flnn import MhaFlnnRegressor, MhaFlnnClassifier
