@@ -26,9 +26,9 @@ class FlnnRegressor(BaseFlnn):
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : {"relu", "leaky_relu", "celu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid",
+    act_name : {"none", "relu", "leaky_relu", "celu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid",
         "hard_sigmoid", "log_sigmoid", "silu", "swish", "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink",
-        "soft_shrink", "hard_shrink", "softmin", "softmax", "log_softmax" }, default='sigmoid'
+        "soft_shrink", "hard_shrink", "softmin", "softmax", "log_softmax" }, default='none'
         Activation function for the hidden layer.
 
     obj_name : str, default=None
@@ -65,7 +65,7 @@ class FlnnRegressor(BaseFlnn):
     >>> data.X_train, scaler = data.scale(data.X_train, scaling_methods=("minmax"))
     >>> data.X_test = scaler.transform(data.X_test)
     >>> ## Create model
-    >>> model = FlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="elu",
+    >>> model = FlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="none",
     >>>                          obj_name="MSE", max_epochs=100, batch_size=32, optimizer="SGD", verbose=True)
     >>> ## Train the model
     >>> model.fit(data.X_train, data.y_train)
@@ -81,10 +81,12 @@ class FlnnRegressor(BaseFlnn):
         "MAE": torch.nn.L1Loss, "MSE": torch.nn.MSELoss
     }
 
-    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="elu",
-                 obj_name="MSE", max_epochs=1000, batch_size=32, optimizer="SGD", optimizer_paras=None, verbose=False, **kwargs):
+    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="none",
+                 obj_name="MSE", max_epochs=1000, batch_size=32, optimizer="SGD", optimizer_paras=None, verbose=False,
+                 **kwargs):
         super().__init__(expand_name=expand_name, n_funcs=n_funcs, act_name=act_name, obj_name=obj_name,
-                         max_epochs=max_epochs, batch_size=batch_size, optimizer=optimizer, optimizer_paras=optimizer_paras, verbose=verbose)
+                         max_epochs=max_epochs, batch_size=batch_size, optimizer=optimizer,
+                         optimizer_paras=optimizer_paras, verbose=verbose)
         self.kwargs = kwargs
 
     def create_network(self, X, y):
@@ -190,7 +192,7 @@ class FlnnRegressor(BaseFlnn):
 
 class FlnnClassifier(BaseFlnn):
     """
-    Defines the class for traditional FLNN network for Classification problems that inherit the BaseFlnn and ClassifierMixin classes.
+    Defines the class for traditional FLNN network for Classification problems that inherit the BaseFlnn class
 
     Parameters
     ----------
@@ -201,9 +203,9 @@ class FlnnClassifier(BaseFlnn):
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : {"relu", "leaky_relu", "celu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid",
-        "hard_sigmoid", "log_sigmoid", "silu", "swish", "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink",
-        "soft_shrink", "hard_shrink", "softmin", "softmax", "log_softmax" }, default='sigmoid'
+    act_name : {"none", "relu", "leaky_relu", "celu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh",
+        "sigmoid", "hard_sigmoid", "log_sigmoid", "silu", "swish", "hard_swish", "soft_plus", "mish", "soft_sign",
+        "tanh_shrink", "soft_shrink", "hard_shrink", "softmin", "softmax", "log_softmax" }, default='none'
         Activation function for the hidden layer.
 
     obj_name : str, default=NLLL
@@ -240,7 +242,7 @@ class FlnnClassifier(BaseFlnn):
     >>> data.X_train, scaler = data.scale(data.X_train, scaling_methods=("minmax"))
     >>> data.X_test = scaler.transform(data.X_test)
     >>> ## Create model
-    >>> model = FlnnClassifier(expand_name="chebyshev", n_funcs=4, act_name="elu",
+    >>> model = FlnnClassifier(expand_name="chebyshev", n_funcs=4, act_name="none",
     >>>                          obj_name="CEL", max_epochs=100, batch_size=32, optimizer="SGD", verbose=True)
     >>> ## Train the model
     >>> model.fit(data.X_train, data.y_train)
@@ -253,7 +255,8 @@ class FlnnClassifier(BaseFlnn):
     """
 
     SUPPORTED_LOSSES = {
-        "NLLL": torch.nn.NLLLoss, "PNLLL": torch.nn.PoissonNLLLoss, "GNLLL": torch.nn.GaussianNLLLoss, "KLDL": torch.nn.KLDivLoss,
+        "NLLL": torch.nn.NLLLoss, "PNLLL": torch.nn.PoissonNLLLoss, "GNLLL": torch.nn.GaussianNLLLoss,
+        "KLDL": torch.nn.KLDivLoss,
         "HEL": torch.nn.HingeEmbeddingLoss, "BCEL": torch.nn.BCELoss, "BCELL": torch.nn.BCEWithLogitsLoss,
         "CEL": torch.nn.CrossEntropyLoss
     }
@@ -262,10 +265,11 @@ class FlnnClassifier(BaseFlnn):
     CLS_OBJ_BINARY_2 = ["NLLL"]
     CLS_OBJ_MULTI = ["NLLL", "CEL"]
 
-    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="relu",
-                 obj_name="NLLL", max_epochs=1000, batch_size=32, optimizer="SGD", optimizer_paras=None, verbose=False, **kwargs):
+    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="none", obj_name="NLLL",
+                 max_epochs=1000, batch_size=32, optimizer="SGD", optimizer_paras=None, verbose=False, **kwargs):
         super().__init__(expand_name=expand_name, n_funcs=n_funcs, act_name=act_name, obj_name=obj_name,
-                         max_epochs=max_epochs, batch_size=batch_size, optimizer=optimizer, optimizer_paras=optimizer_paras, verbose=verbose)
+                         max_epochs=max_epochs, batch_size=batch_size, optimizer=optimizer,
+                         optimizer_paras=optimizer_paras, verbose=verbose)
         self.kwargs = kwargs
         self.is_binary = True
 
@@ -327,7 +331,7 @@ class FlnnClassifier(BaseFlnn):
         self.network, self.obj_scaler = self.create_network(X, y)
         if self.is_binary:
             y = y.astype(np.float32)
-            if self.obj_name in ("NLLL", ):
+            if self.obj_name in ("NLLL",):
                 y = y.astype(np.int64)
             if self.obj_name in ("CEL", "BCEL", "BCELL"):
                 y = y.reshape((-1, 1))
@@ -352,7 +356,7 @@ class FlnnClassifier(BaseFlnn):
             True labels for `X`.
 
         method : str, default="AS"
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -377,7 +381,7 @@ class FlnnClassifier(BaseFlnn):
             True labels for `X`.
 
         list_methods : list, default=("AS", "RS")
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------

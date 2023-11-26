@@ -20,12 +20,13 @@ class FLNN(nn.Module):
 
     SUPPORTED_EXPANDS = ["chebyshev", "legendre", "gegenbauer", "laguerre", "hermite", "power", "trigonometric"]
     SUPPORTED_N_FUNCS = list(range(1, 11))
-    SUPPORTED_ACTIVATIONS = ['threshold', 'relu', 'rrelu', 'hardtanh', 'relu6', 'sigmoid', 'hardsigmoid', 'tanh',
-           'silu', 'mish', 'hardswish', 'elu', 'celu', 'selu', 'glu', 'gelu', 'hardshrink', 'leakyrelu',
-           'logsigmoid', 'softplus', 'softshrink', 'multiheadattention', 'prelu', 'softsign', 'tanhshrink',
-           'softmin', 'softmax', 'logsoftmax']
+    SUPPORTED_ACTIVATIONS = ['none', 'threshold', 'relu', 'rrelu', 'hardtanh', 'relu6', 'sigmoid',
+                             'hardsigmoid', 'tanh', 'silu', 'mish', 'hardswish', 'elu', 'celu',
+                             'selu', 'glu', 'gelu', 'hardshrink', 'leakyrelu', 'logsigmoid',
+                             'softplus', 'softshrink', 'multiheadattention', 'prelu', 'softsign',
+                             'tanhshrink', 'softmin', 'softmax', 'logsoftmax']
 
-    def __init__(self, size_input=10, size_output=1, expand_name="chebyshev", n_funcs=4, act_name='elu'):
+    def __init__(self, size_input=10, size_output=1, expand_name="chebyshev", n_funcs=4, act_name='none'):
         super(FLNN, self).__init__()
         self.input_nodes = size_input * n_funcs
         self.output_nodes = size_output
@@ -36,6 +37,8 @@ class FLNN(nn.Module):
         self.act_name = act_name
         if act_name == "softmax":
             self.act_func = nn.Softmax(dim=0)
+        elif act_name == "none":
+            self.act_func = nn.Identity()
         else:
             self.act_func = getattr(nn.functional, self.act_name)
         # Create the output layer
@@ -66,9 +69,9 @@ class BaseFlnn(BaseEstimator):
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : {"relu", "leaky_relu", "celu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid",
-        "hard_sigmoid", "log_sigmoid", "silu", "swish", "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink",
-        "soft_shrink", "hard_shrink", "softmin", "softmax", "log_softmax" }, default='sigmoid'
+    act_name : {"none", "relu", "leaky_relu", "celu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh",
+        "sigmoid", "hard_sigmoid", "log_sigmoid", "silu", "swish", "hard_swish", "soft_plus", "mish", "soft_sign",
+        "tanh_shrink", "soft_shrink", "hard_shrink", "softmin", "softmax", "log_softmax" }, default='none'
         Activation function for the hidden layer.
 
     obj_name : str, default=None
@@ -101,9 +104,8 @@ class BaseFlnn(BaseEstimator):
     SUPPORTED_OPTIMIZERS = ["Adadelta", "Adagrad", "Adam", "Adamax", "AdamW", "ASGD",
                             "LBFGS", "NAdam", "RAdam", "RMSprop", "Rprop", "SGD"]
 
-    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="elu",
-                 obj_name=None, max_epochs=1000, batch_size=32,
-                 optimizer="SGD", optimizer_paras=None, verbose=False):
+    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="none", obj_name=None,
+                 max_epochs=1000, batch_size=32, optimizer="SGD", optimizer_paras=None, verbose=False):
         super().__init__()
         self.module = FLNN
         self.expand_name = validator.check_str("expand_name", expand_name, FLNN.SUPPORTED_EXPANDS)
@@ -181,7 +183,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         method : str, default="RMSE"
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -205,7 +207,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         list_methods : list, default=("MSE", "MAE")
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -232,7 +234,7 @@ class BaseFlnn(BaseEstimator):
             True labels for `X`.
 
         method : str, default="AS"
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -264,7 +266,7 @@ class BaseFlnn(BaseEstimator):
             True labels for `X`.
 
         list_methods : list, default=("AS", "RS")
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -320,7 +322,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         method : str, default="RMSE"
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -342,7 +344,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         list_methods : list, default=("MSE", "MAE")
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
