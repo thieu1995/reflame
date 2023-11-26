@@ -6,7 +6,7 @@
 
 ---
 
-[![GitHub release](https://img.shields.io/badge/release-1.0.0-yellow.svg)](https://github.com/thieu1995/reflame/releases)
+[![GitHub release](https://img.shields.io/badge/release-1.0.1-yellow.svg)](https://github.com/thieu1995/reflame/releases)
 [![Wheel](https://img.shields.io/pypi/wheel/gensim.svg)](https://pypi.python.org/pypi/reflame) 
 [![PyPI version](https://badge.fury.io/py/reflame.svg)](https://badge.fury.io/py/reflame)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/reflame.svg)
@@ -19,11 +19,11 @@
 [![Chat](https://img.shields.io/badge/Chat-on%20Telegram-blue)](https://t.me/+fRVCJGuGJg1mNDg1)
 ![GitHub contributors](https://img.shields.io/github/contributors/thieu1995/reflame.svg)
 [![GitTutorial](https://img.shields.io/badge/PR-Welcome-%23FF8300.svg?)](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8249046.svg)](https://doi.org/10.5281/zenodo.8249046)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10067995.svg)](https://doi.org/10.5281/zenodo.10067995)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 
-Reflame (REvolutionizing Functional Link Nets by Metaheuristic Algorithms) is a Python library that 
+Reflame (REvolutionizing Functional Link Artificial neural networks by MEtaheuristic algorithms) is a Python library that 
 implements a framework for training Functional Link Neural Network (FLNN) networks using Metaheuristic Algorithms. It 
 provides a comparable alternative to the traditional FLNN network and is compatible with the Scikit-Learn library. 
 With Reflame, you can perform searches and hyperparameter tuning using the functionalities provided by the Scikit-Learn library.
@@ -34,7 +34,7 @@ With Reflame, you can perform searches and hyperparameter tuning using the funct
 * **Total Official Metaheuristic-based Flnn Classification**: > 200 Models
 * **Supported performance metrics**: >= 67 (47 regressions and 20 classifications)
 * **Supported objective functions (as fitness functions or loss functions)**: >= 67 (47 regressions and 20 classifications)
-* **Documentation:** https://intelelm.readthedocs.io/en/latest/
+* **Documentation:** https://reflame.readthedocs.io
 * **Python versions:** >= 3.8.x
 * **Dependencies:** numpy, scipy, scikit-learn, pandas, mealpy, permetrics, torch, skorch
 
@@ -96,7 +96,7 @@ Please include these citations if you plan to use this library:
 
 * Install the [current PyPI release](https://pypi.python.org/pypi/reflame):
 ```sh 
-$ pip install reflame==1.0.0
+$ pip install reflame==1.0.1
 ```
 
 * Install directly from source code
