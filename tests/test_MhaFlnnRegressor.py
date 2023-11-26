@@ -16,7 +16,7 @@ def test_MhaFlnnRegressor_class():
     y = 2 * X + 1 + noise
 
     opt_paras = {"name": "GA", "epoch": 10, "pop_size": 30}
-    model = MhaFlnnRegressor(expand_name="chebyshev", n_funcs=3, act_name="elu", obj_name="RMSE",
+    model = MhaFlnnRegressor(expand_name="chebyshev", n_funcs=3, act_name="none", obj_name="RMSE",
                              optimizer="BaseGA", optimizer_paras=opt_paras, verbose=True)
     model.fit(X, y)
 

@@ -15,7 +15,7 @@ def test_FlnnRegressor_class():
     noise = np.random.normal(loc=0.0, scale=0.1, size=(100, 5))
     y = 2 * X + 1 + noise
 
-    model = FlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="elu",
+    model = FlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="none",
                           obj_name="MSE", max_epochs=100, batch_size=32, optimizer="SGD", verbose=True)
     model.fit(X, y)
 
