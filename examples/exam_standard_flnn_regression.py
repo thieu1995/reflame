@@ -24,7 +24,7 @@ data.y_train, scaler_y = data.scale(data.y_train, scaling_methods=("standard", "
 data.y_test = scaler_y.transform(data.y_test)
 
 ## Create model
-model = FlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="elu",
+model = FlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="none",
                       obj_name="MSE", max_epochs=100, batch_size=32, optimizer="SGD", verbose=True)
 
 ## Train the model
