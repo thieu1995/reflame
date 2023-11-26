@@ -25,9 +25,9 @@ class MhaFlnnRegressor(BaseMhaFlnn, RegressorMixin):
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : str, default='sigmoid'
+    act_name : str, default='none'
         Activation function for the hidden layer. The supported activation functions are:
-        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
+        {"none", "relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
         "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
 
     obj_name : str, default="MSE"
@@ -59,13 +59,13 @@ class MhaFlnnRegressor(BaseMhaFlnn, RegressorMixin):
     >>> data.X_train_scaled, scaler = data.scale(data.X_train, method="MinMaxScaler")
     >>> data.X_test_scaled = scaler.transform(data.X_test)
     >>> opt_paras = {"name": "GA", "epoch": 10, "pop_size": 30}
-    >>> model = MhaFlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="elu", obj_name="RMSE", optimizer="BaseGA", optimizer_paras=opt_paras)
+    >>> model = MhaFlnnRegressor(expand_name="chebyshev", n_funcs=4, act_name="none", obj_name="RMSE", optimizer="BaseGA", optimizer_paras=opt_paras)
     >>> model.fit(data.X_train_scaled, data.y_train)
     >>> pred = model.predict(data.X_test_scaled)
     >>> print(pred)
     """
 
-    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="elu",
+    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="none",
                  obj_name="MSE", optimizer="BaseGA", optimizer_paras=None, verbose=False, obj_weights=None):
         super().__init__(expand_name=expand_name, n_funcs=n_funcs, act_name=act_name,
                          obj_name=obj_name, optimizer=optimizer, optimizer_paras=optimizer_paras, verbose=verbose)
@@ -197,9 +197,9 @@ class MhaFlnnClassifier(BaseMhaFlnn, ClassifierMixin):
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : str, default='sigmoid'
+    act_name : str, default='none'
         Activation function for the hidden layer. The supported activation functions are:
-        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
+        {"none", "relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
         "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
 
     obj_name : str, default="AS"
@@ -233,7 +233,7 @@ class MhaFlnnClassifier(BaseMhaFlnn, ClassifierMixin):
     >>> opt_paras = {"name": "GA", "epoch": 10, "pop_size": 30}
     >>> print(MhaFlnnClassifier.SUPPORTED_CLS_OBJECTIVES)
     {'PS': 'max', 'NPV': 'max', 'RS': 'max', ...., 'KLDL': 'min', 'BSL': 'min'}
-    >>> model = MhaFlnnClassifier(hidden_size=10, act_name="elu", obj_name="BSL", optimizer="BaseGA", optimizer_paras=opt_paras)
+    >>> model = MhaFlnnClassifier(expand_name="chebyshev", n_funcs=4, act_name="none", obj_name="BSL", optimizer="BaseGA", optimizer_paras=opt_paras)
     >>> model.fit(data.X_train_scaled, data.y_train)
     >>> pred = model.predict(data.X_test_scaled)
     >>> print(pred)
@@ -242,7 +242,7 @@ class MhaFlnnClassifier(BaseMhaFlnn, ClassifierMixin):
 
     CLS_OBJ_LOSSES = ["CEL", "HL", "KLDL", "BSL"]
 
-    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="elu",
+    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="none",
                  obj_name=None, optimizer="BaseGA", optimizer_paras=None, verbose=False):
         super().__init__(expand_name=expand_name, n_funcs=n_funcs, act_name=act_name,
                          obj_name=obj_name, optimizer=optimizer, optimizer_paras=optimizer_paras, verbose=verbose)
@@ -283,6 +283,7 @@ class MhaFlnnClassifier(BaseMhaFlnn, ClassifierMixin):
         self.network.update_weights_from_solution(solution)
         y_pred = self.predict(self.X_temp, return_prob=self.return_prob)
         y1 = self.obj_scaler.inverse_transform(self.y_temp)
+        # print(y_pred)
         loss_train = ClassificationMetric(y1, y_pred, decimal=6).get_metric_by_name(self.obj_name)[self.obj_name]
         return loss_train
 

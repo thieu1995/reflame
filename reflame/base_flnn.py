@@ -7,6 +7,7 @@
 import pickle
 from pathlib import Path
 import numpy as np
+
 import pandas as pd
 from permetrics import RegressionMetric, ClassificationMetric
 from sklearn.base import BaseEstimator
@@ -33,9 +34,9 @@ class FLNN:
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
     
-    act_name : str, default='sigmoid'
+    act_name : str, default='none'
         Activation function for the hidden layer. The supported activation functions are: 
-        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid", 
+        {"none", "relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
         "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
     """
     def __init__(self, size_input=5, size_output=1, expand_name="chebyshev", n_funcs=4, act_name='elu'):
@@ -121,9 +122,9 @@ class BaseFlnn(BaseEstimator):
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : str, default='sigmoid'
+    act_name : str, default='none'
         Activation function for the hidden layer. The supported activation functions are:
-        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
+        {"none", "relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
         "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
     """
 
@@ -131,7 +132,7 @@ class BaseFlnn(BaseEstimator):
     SUPPORTED_REG_METRICS = get_all_regression_metrics()
     CLS_OBJ_LOSSES = None
 
-    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="elu"):
+    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="none"):
         super().__init__()
         self.expand_name = expand_name
         self.n_funcs = n_funcs
@@ -197,7 +198,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         method : str, default="RMSE"
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -221,7 +222,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         list_methods : list, default=("MSE", "MAE")
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -248,7 +249,7 @@ class BaseFlnn(BaseEstimator):
             True labels for `X`.
 
         method : str, default="AS"
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -280,7 +281,7 @@ class BaseFlnn(BaseEstimator):
             True labels for `X`.
 
         list_methods : list, default=("AS", "RS")
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -336,7 +337,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         method : str, default="RMSE"
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -358,7 +359,7 @@ class BaseFlnn(BaseEstimator):
             True values for `X`.
 
         list_methods : list, default=("MSE", "MAE")
-            You can get all of the metrics from Permetrics library: https://github.com/thieu1995/permetrics
+            You can get all metrics from Permetrics library: https://github.com/thieu1995/permetrics
 
         Returns
         -------
@@ -450,9 +451,9 @@ class BaseMhaFlnn(BaseFlnn):
     n_funcs : int, default=4
         The first `n_funcs` in expand functions list will be used. Valid value from 1 to 10.
 
-    act_name : str, default='sigmoid'
+    act_name : str, default='none'
         Activation function for the hidden layer. The supported activation functions are:
-        {"relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
+        {"none", "relu", "prelu", "gelu", "elu", "selu", "rrelu", "tanh", "hard_tanh", "sigmoid", "hard_sigmoid",
         "swish",  "hard_swish", "soft_plus", "mish", "soft_sign", "tanh_shrink", "soft_shrink", "hard_shrink"}
 
     obj_name : None or str, default=None
@@ -476,7 +477,8 @@ class BaseMhaFlnn(BaseFlnn):
     SUPPORTED_CLS_OBJECTIVES = get_all_classification_metrics()
     SUPPORTED_REG_OBJECTIVES = get_all_regression_metrics()
 
-    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="elu", obj_name=None, optimizer="BaseGA", optimizer_paras=None, verbose=True):
+    def __init__(self, expand_name="chebyshev", n_funcs=4, act_name="none",
+                 obj_name=None, optimizer="BaseGA", optimizer_paras=None, verbose=True):
         super().__init__(expand_name=expand_name, n_funcs=n_funcs, act_name=act_name)
         self.obj_name = obj_name
         self.optimizer_paras = optimizer_paras
@@ -509,7 +511,7 @@ class BaseMhaFlnn(BaseFlnn):
     def objective_function(self, solution=None):
         pass
 
-    def fit(self, X, y, lb=(-10.0, ), ub=(10.0, ), save_population=False):
+    def fit(self, X, y, lb=(-1.0, ), ub=(1.0, ), save_population=False):
         self.network, self.obj_scaler = self.create_network(X, y)
         y_scaled = self.obj_scaler.transform(y)
         self.X_temp, self.y_temp = X, y_scaled
