@@ -4,7 +4,7 @@ Installation
 
 * Install the `current PyPI release <https://pypi.python.org/pypi/reflame />`_::
 
-   $ pip install reflame==1.0.0
+   $ pip install reflame==1.0.1
 
 
 * Install directly from source code::

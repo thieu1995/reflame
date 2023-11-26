@@ -6,7 +6,7 @@
 Welcome to Reflame's documentation!
 ====================================
 
-.. image:: https://img.shields.io/badge/release-1.0.0-yellow.svg
+.. image:: https://img.shields.io/badge/release-1.0.1-yellow.svg
    :target: https://github.com/thieu1995/reflame/releases
 
 .. image:: https://img.shields.io/pypi/wheel/gensim.svg
@@ -45,14 +45,14 @@ Welcome to Reflame's documentation!
 .. image:: https://img.shields.io/badge/PR-Welcome-%23FF8300.svg?
    :target: https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8249046.svg
-   :target: https://doi.org/10.5281/zenodo.8249046
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.10067995.svg
+   :target: https://doi.org/10.5281/zenodo.10067995
 
 .. image:: https://img.shields.io/badge/License-GPLv3-blue.svg
    :target: https://www.gnu.org/licenses/gpl-3.0
 
 
-Reflame (REvolutionizing Functional Link Nets by Metaheuristic Algorithms) is a Python library that
+Reflame (REvolutionizing Functional Link Artificial neural networks by MEtaheuristic algorithms) is a Python library that
 implements a framework for training Functional Link Neural Network (FLNN) networks using Metaheuristic Algorithms. It
 provides a comparable alternative to the traditional FLNN network and is compatible with the Scikit-Learn library.
 With Reflame, you can perform searches and hyperparameter tuning using the functionalities provided by the Scikit-Learn library.
@@ -63,7 +63,7 @@ With Reflame, you can perform searches and hyperparameter tuning using the funct
 * **Total Official Metaheuristic-based Flnn Classification**: > 200 Models
 * **Supported performance metrics**: >= 67 (47 regressions and 20 classifications)
 * **Supported objective functions (as fitness functions or loss functions)**: >= 67 (47 regressions and 20 classifications)
-* **Documentation:** https://intelelm.readthedocs.io/en/latest/
+* **Documentation:** https://reflame.readthedocs.io
 * **Python versions:** >= 3.8.x
 * **Dependencies:** numpy, scipy, scikit-learn, pandas, mealpy, permetrics, torch, skorch
 
