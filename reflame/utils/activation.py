@@ -7,6 +7,10 @@
 import numpy as np
 
 
+def none(x):
+    return x
+
+
 def relu(x):
     return np.maximum(0, x)
 
